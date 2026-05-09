@@ -59,12 +59,17 @@ build:
 language: python/3.12
 region: asia-south1
 serverlessConfig:
+    PortMap:
+        - Name: "http"
+          Port: 8080
+          Protocol: "http"
     Scaling:
         AutoStop: false
         Min: 1
         Max: 1
         MaxIdleTime: 300
     Resources:
-        CPU: 0.1
-        MemoryMB: 128
-        MemoryMaxMB: 128
+        CPU: 1
+        MemoryMB: 1536
+        MemoryMaxMB: 2048
+    Timeout: 120
