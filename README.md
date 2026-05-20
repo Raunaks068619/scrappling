@@ -7,6 +7,9 @@ behind a small FastAPI HTTP API. Send a URL + selectors, get JSON back.
 
 - `GET /health` — liveness probe
 - `GET /` — self-doc
+- `GET /llms.txt` — agent-readable discovery file
+- `GET /llms-full.txt` — full agent API guide
+- `GET /agents.md`, `/skill.md`, `/developers.md` — Markdown agent/developer quick-starts
 - `POST /scrape` — see below
 
 ### `POST /scrape`

@@ -18,8 +18,10 @@ import logging
 from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field, HttpUrl
+
+from .agent_docs import AGENTS_MD, LLMS_FULL_TXT, LLMS_TXT
 
 # Lazy-import the heavy scrapling fetchers inside the dispatch so cold start of
 # /health stays fast and an import failure on a single fetcher doesn't kill the
@@ -78,6 +80,8 @@ def root() -> dict[str, Any]:
         "service": "scrappling",
         "endpoints": {
             "GET /health": "liveness probe",
+            "GET /llms.txt": "agent-readable discovery",
+            "GET /agents.md": "agent API guide",
             "POST /scrape": "scrape a URL — see example below",
         },
         "example_request": {
@@ -86,6 +90,31 @@ def root() -> dict[str, Any]:
             "css": [".quote .text::text", ".author::text"],
         },
     }
+
+
+@app.get("/llms.txt", response_class=PlainTextResponse)
+def llms_txt() -> str:
+    return LLMS_TXT
+
+
+@app.get("/llms-full.txt", response_class=PlainTextResponse)
+def llms_full_txt() -> str:
+    return LLMS_FULL_TXT
+
+
+@app.get("/agents.md", response_class=PlainTextResponse)
+def agents_md() -> str:
+    return AGENTS_MD
+
+
+@app.get("/skill.md", response_class=PlainTextResponse)
+def skill_md() -> str:
+    return AGENTS_MD
+
+
+@app.get("/developers.md", response_class=PlainTextResponse)
+def developers_md() -> str:
+    return AGENTS_MD
 
 
 @app.post("/scrape", response_model=ScrapeResponse)
